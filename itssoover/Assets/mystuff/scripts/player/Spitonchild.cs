@@ -5,28 +5,27 @@ public class Spitonchild : MonoBehaviour
     public GameObject bulletPrefab; // Bullet prefab to be instantiated
     public float shootingForce = 10f; // Force applied to the bullet
     public Transform shootPoint; // The point from where the bullet will be shot
-    public GameObject arrowPrefab; // Arrow prefab to indicate direction
-    private GameObject arrowInstance;
-
-    void Start()
-    {
-        // Instantiate the arrow at the shooting point's position and set it as a child of the shooting point
-        arrowInstance = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
-        arrowInstance.transform.SetParent(transform); // Parent the arrow to the player
-        PositionArrowAndShootPoint();
-    }
+    public Transform playerTransform; // Reference to the player's transform
 
     void Update()
     {
-        // Update arrow direction to face the mouse cursor
+        // Update direction to face the mouse cursor
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = (mousePosition - shootPoint.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        // Clamp the angle to be between -20 and 50 degrees
-        angle = Mathf.Clamp(angle, -20f, 50f);
+        // Rotate the shoot point to face the mouse cursor
+        shootPoint.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
-        arrowInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        // Mirror the player sprite if the cursor is on the left side of the player or if "A" key is pressed
+        if (mousePosition.x < playerTransform.position.x || Input.GetKey(KeyCode.A))
+        {
+            playerTransform.localScale = new Vector3(-1, 1, 1); // Mirror the player sprite
+        }
+        else if (mousePosition.x >= playerTransform.position.x || Input.GetKey(KeyCode.D))
+        {
+            playerTransform.localScale = new Vector3(1, 1, 1); // Reset to normal
+        }
 
         // Shoot a bullet when "F" key is pressed
         if (Input.GetKeyDown(KeyCode.F))
@@ -43,12 +42,5 @@ public class Spitonchild : MonoBehaviour
         // Apply force to the bullet
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(direction * shootingForce, ForceMode2D.Impulse);
-    }
-
-    void PositionArrowAndShootPoint()
-    {
-        // Adjust shootPoint to be at the end of the arrow
-        Vector3 arrowSize = arrowInstance.GetComponent<SpriteRenderer>().bounds.size;
-        shootPoint.localPosition = new Vector3(arrowSize.x / 2, 0, 0);
     }
 }
