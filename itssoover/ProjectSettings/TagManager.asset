@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - bron
+  - peasant
   layers:
   - Default
   - TransparentFX
