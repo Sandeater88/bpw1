@@ -7,10 +7,24 @@ public class Spitonchild : MonoBehaviour
     public Transform shootPoint; // The point from where the bullet will be shot
     private Vector3 originalShootPointPosition; // The original position of the shoot point
 
+    public Sprite spitSprite; // The spit sprite to display
+    private SpriteRenderer spriteRenderer; // The SpriteRenderer component for the spit sprite
+    private bool shouldMirrorSpitSprite = false; // To track if the spit sprite should be mirrored
+
     void Start()
     {
         // Store the original position of the shoot point
         originalShootPointPosition = shootPoint.localPosition;
+
+        // Create a new GameObject for the spit sprite
+        GameObject spitSpriteObject = new GameObject("SpitSprite");
+        spitSpriteObject.transform.SetParent(transform);
+        spitSpriteObject.transform.localPosition = Vector3.zero;
+
+        // Add a SpriteRenderer component to the spit sprite object
+        spriteRenderer = spitSpriteObject.AddComponent<SpriteRenderer>();
+        spriteRenderer.sprite = spitSprite;
+        spriteRenderer.enabled = false; // Initially hide the sprite
     }
 
     void Update()
@@ -27,18 +41,21 @@ public class Spitonchild : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             shootPoint.localPosition -= new Vector3(4f, 0f, 0f);
+            shouldMirrorSpitSprite = true;
         }
 
         // Reset the shoot point position if "D" key is pressed
         if (Input.GetKeyDown(KeyCode.D))
         {
             shootPoint.localPosition = originalShootPointPosition;
+            shouldMirrorSpitSprite = false;
         }
 
         // Shoot a bullet when "F" key is pressed
         if (Input.GetKeyDown(KeyCode.F))
         {
             Shoot(direction);
+            StartCoroutine(ShowSpitSpriteTemporarily());
         }
     }
 
@@ -50,5 +67,20 @@ public class Spitonchild : MonoBehaviour
         // Apply force to the bullet
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(direction * shootingForce, ForceMode2D.Impulse);
+    }
+
+    System.Collections.IEnumerator ShowSpitSpriteTemporarily()
+    {
+        // Show the spit sprite
+        spriteRenderer.enabled = true;
+
+        // Check if the spit sprite should be mirrored
+        spriteRenderer.flipX = shouldMirrorSpitSprite;
+
+        // Wait for 0.5 seconds
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide the spit sprite
+        spriteRenderer.enabled = false;
     }
 }
