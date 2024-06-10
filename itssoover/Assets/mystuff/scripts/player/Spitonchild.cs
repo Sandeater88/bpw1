@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Spitonchild : MonoBehaviour
 {
@@ -112,7 +113,7 @@ public class Spitonchild : MonoBehaviour
         rb.AddForce(direction * shootingForce, ForceMode2D.Impulse);
     }
 
-    System.Collections.IEnumerator ShowSpitSpriteTemporarily()
+    IEnumerator ShowSpitSpriteTemporarily()
     {
         // Show the spit sprite
         spriteRenderer.enabled = true;
@@ -134,5 +135,15 @@ public class Spitonchild : MonoBehaviour
             float ammoPercentage = (float)currentAmmo / maxAmmo;
             OnAmmoChanged(ammoPercentage);
         }
+    }
+
+    public void IncreaseAmmo(int amount)
+    {
+        currentAmmo = Mathf.Min(currentAmmo + amount, maxAmmo);
+        if (currentAmmo > 0)
+        {
+            canShoot = true;
+        }
+        NotifyAmmoChanged();
     }
 }
