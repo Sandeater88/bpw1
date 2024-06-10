@@ -17,22 +17,15 @@ public class EnemyScript : MonoBehaviour
     private Transform enemyTransform;
     private Vector2[] patrolPoints; // Array to store patrol points for roaming
     private int currentPatrolIndex; // Index of the current patrol point
+    private Vector2 roamingOrigin; // Origin point for roaming
 
     private void Start()
     {
         currentState = EnemyState.Roaming;
         playerTransform = GameObject.FindGameObjectWithTag(playerTag).transform;
         enemyTransform = transform;
-
-        // Define patrol points for roaming in a 4x4 square
-        patrolPoints = new Vector2[]
-        {
-            enemyTransform.position + new Vector3(2, 0, 0), // Move right
-            enemyTransform.position + new Vector3(2, 2, 0), // Move up
-            enemyTransform.position + new Vector3(0, 2, 0), // Move left
-            enemyTransform.position + new Vector3(0, 0, 0)  // Move down
-        };
-
+        roamingOrigin = enemyTransform.position;
+        InitializePatrolPoints();
         currentPatrolIndex = 0;
     }
 
@@ -48,6 +41,18 @@ public class EnemyScript : MonoBehaviour
                 MoveTowardsPlayer();
                 break;
         }
+    }
+
+    private void InitializePatrolPoints()
+    {
+        // Define patrol points for roaming in a 4x4 square relative to the current position
+        patrolPoints = new Vector2[]
+        {
+            roamingOrigin + new Vector2(2, 0), // Move right
+            roamingOrigin + new Vector2(2, 2), // Move up
+            roamingOrigin + new Vector2(0, 2), // Move left
+            roamingOrigin + new Vector2(0, 0)  // Move down
+        };
     }
 
     private void Roam()
@@ -81,6 +86,8 @@ public class EnemyScript : MonoBehaviour
         if (Vector2.Distance(enemyTransform.position, playerTransform.position) > attackRange)
         {
             currentState = EnemyState.Roaming;
+            roamingOrigin = enemyTransform.position; // Update roaming origin to current position
+            InitializePatrolPoints(); // Re-initialize patrol points based on new origin
         }
     }
 }

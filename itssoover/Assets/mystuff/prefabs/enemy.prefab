@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5842980870439740783}
   - component: {fileID: 4087542845455004913}
   - component: {fileID: 5295431568821469033}
+  - component: {fileID: 279147001526195986}
   m_Layer: 0
   m_Name: enemy
   m_TagString: peasant
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.61, y: -0.3649, z: 0}
-  m_LocalScale: {x: 1.5532907, y: 1.6735599, z: 1}
+  m_LocalScale: {x: 1.3092687, y: 1.4829932, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -119,7 +120,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.107630074}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -130,7 +131,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.024581, y: 0.9250629}
   m_EdgeRadius: 0
 --- !u!50 &4087542845455004913
 Rigidbody2D:
@@ -172,6 +173,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTag: Player
-  roamRadius: 3
-  attackRange: 2
-  moveSpeed: 2
+  attackRange: 5
+  moveSpeed: 4
+--- !u!114 &279147001526195986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4799526214354952602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ebdbe61a08f729439ac5de012cfbccc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  healthBarPrefab: {fileID: 0}
