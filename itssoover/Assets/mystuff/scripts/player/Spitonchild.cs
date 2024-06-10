@@ -11,6 +11,12 @@ public class Spitonchild : MonoBehaviour
     private SpriteRenderer spriteRenderer; // The SpriteRenderer component for the spit sprite
     private bool shouldMirrorSpitSprite = false; // To track if the spit sprite should be mirrored
 
+    public Ammo healthBar; // Reference to the health bar
+
+    private int shotsFired = 0; // Number of shots fired by the player
+    private const int maxShots = 20; // Maximum number of shots allowed
+    private bool canShoot = true; // Whether the player can shoot
+
     void Start()
     {
         // Store the original position of the shoot point
@@ -51,11 +57,21 @@ public class Spitonchild : MonoBehaviour
             shouldMirrorSpitSprite = false;
         }
 
-        // Shoot a bullet when "F" key is pressed
-        if (Input.GetKeyDown(KeyCode.F))
+        // Shoot a bullet when "F" key is pressed and the player can shoot
+        if (Input.GetKeyDown(KeyCode.F) && canShoot)
         {
             Shoot(direction);
             StartCoroutine(ShowSpitSpriteTemporarily());
+
+            // Increase shots fired and check if the player has reached the maximum shots
+            shotsFired++;
+            if (shotsFired >= maxShots)
+            {
+                canShoot = false;
+            }
+
+            // Decrease health bar fill amount
+            healthBar.DecreaseFill(1f / maxShots);
         }
     }
 
