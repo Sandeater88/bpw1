@@ -7,7 +7,7 @@ public class EnemyHealthManager : MonoBehaviour
 
     public GameObject healthBarPrefab; // Prefab for the health bar
     private GameObject healthBarInstance;
-    private HealthBar healthBarScript;
+    private EnemyHealthBar healthBarScript;
 
     public Sprite crySprite; // Sprite to change to when health is 0
     public float escapeSpeed = 10f; // Speed of the enemy when escaping
@@ -20,7 +20,7 @@ public class EnemyHealthManager : MonoBehaviour
         currentHealth = maxHealth;
         Vector3 healthBarPosition = transform.position + healthBarOffset;
         healthBarInstance = Instantiate(healthBarPrefab, healthBarPosition, Quaternion.identity, transform);
-        healthBarScript = healthBarInstance.GetComponentInChildren<HealthBar>(); // Ensure to get the component from children
+        healthBarScript = healthBarInstance.GetComponentInChildren<EnemyHealthBar>(); // Ensure to get the component from children
         UpdateHealthBar();
     }
 

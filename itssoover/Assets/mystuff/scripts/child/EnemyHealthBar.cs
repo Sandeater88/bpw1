@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemmyHealthBar : MonoBehaviour
+public class EnemyHealthBar : MonoBehaviour
 {
     public Image healthFill;
 

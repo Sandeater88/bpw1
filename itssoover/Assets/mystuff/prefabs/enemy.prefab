@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5842980870439740783}
   - component: {fileID: 4087542845455004913}
   - component: {fileID: 5295431568821469033}
-  - component: {fileID: 279147001526195986}
+  - component: {fileID: 5298906597363548633}
   m_Layer: 0
   m_Name: enemy
   m_TagString: peasant
@@ -175,7 +175,7 @@ MonoBehaviour:
   playerTag: Player
   attackRange: 5
   moveSpeed: 4
---- !u!114 &279147001526195986
+--- !u!114 &5298906597363548633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,8 +184,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4799526214354952602}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ebdbe61a08f729439ac5de012cfbccc, type: 3}
+  m_Script: {fileID: 11500000, guid: f8d7188667c031e4abefecea8baedeb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  healthBarPrefab: {fileID: 0}
+  healthBarPrefab: {fileID: 6614767756126861565, guid: 68f28331f3fed03439d2745adff4a121, type: 3}
+  crySprite: {fileID: -6388338761078672736, guid: 23748c298f885bf4c89671f6d30f562b, type: 3}
+  escapeSpeed: 10
