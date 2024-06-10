@@ -13,9 +13,15 @@ public class Spitonchild : MonoBehaviour
 
     public Ammo healthBar; // Reference to the health bar
 
-    private int shotsFired = 0; // Number of shots fired by the player
-    private const int maxShots = 20; // Maximum number of shots allowed
+    public int startingAmmo = 20; // Starting ammo amount
+    public int maxAmmo = 20; // Maximum ammo amount
+    public float attackCooldown = 1f; // Cooldown duration between attacks
+    private int currentAmmo; // Current ammo amount
     private bool canShoot = true; // Whether the player can shoot
+    private float lastShootTime; // Time when the player last shot
+
+    public delegate void AmmoChanged(float ammoPercentage);
+    public event AmmoChanged OnAmmoChanged;
 
     void Start()
     {
@@ -31,6 +37,13 @@ public class Spitonchild : MonoBehaviour
         spriteRenderer = spitSpriteObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = spitSprite;
         spriteRenderer.enabled = false; // Initially hide the sprite
+
+        // Set the sorting order of the spit sprite to a high value
+        spriteRenderer.sortingOrder = 10;
+
+        // Set the current ammo to the starting ammo
+        currentAmmo = startingAmmo;
+        NotifyAmmoChanged();
     }
 
     void Update()
@@ -57,21 +70,35 @@ public class Spitonchild : MonoBehaviour
             shouldMirrorSpitSprite = false;
         }
 
+        // Check cooldown
+        if (Time.time - lastShootTime < attackCooldown)
+        {
+            return;
+        }
+
         // Shoot a bullet when "F" key is pressed and the player can shoot
         if (Input.GetKeyDown(KeyCode.F) && canShoot)
         {
             Shoot(direction);
             StartCoroutine(ShowSpitSpriteTemporarily());
 
-            // Increase shots fired and check if the player has reached the maximum shots
-            shotsFired++;
-            if (shotsFired >= maxShots)
+            // Decrease current ammo and check if the player has reached the minimum ammo
+            currentAmmo--;
+            Debug.Log("Current Ammo: " + currentAmmo); // Print the current ammo count
+
+            if (currentAmmo <= 0)
             {
                 canShoot = false;
             }
 
             // Decrease health bar fill amount
-            healthBar.DecreaseFill(1f / maxShots);
+            healthBar.DecreaseFill(1f / maxAmmo);
+
+            // Update last shoot time
+            lastShootTime = Time.time;
+
+            // Notify ammo change
+            NotifyAmmoChanged();
         }
     }
 
@@ -98,5 +125,14 @@ public class Spitonchild : MonoBehaviour
 
         // Hide the spit sprite
         spriteRenderer.enabled = false;
+    }
+
+    void NotifyAmmoChanged()
+    {
+        if (OnAmmoChanged != null)
+        {
+            float ammoPercentage = (float)currentAmmo / maxAmmo;
+            OnAmmoChanged(ammoPercentage);
+        }
     }
 }
