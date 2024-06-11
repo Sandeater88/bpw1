@@ -1,17 +1,18 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class EatApple : MonoBehaviour
 {
     public Otherammo healthBar; // Reference to the Otherammo script attached to the health bar
     public GameObject pooPrefab; // Prefab for the object to be spawned when pressing Q
     public AudioClip pooSound; // Sound effect for dropping poo
-   
+
+    private GameObject currentApple; // The apple the player is currently colliding with
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            EatApple();
+            EatTheApple();
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -20,19 +21,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void EatApple()
+    private void EatTheApple()
     {
-        // Find the apple GameObject with the "Apple" tag
-        GameObject apple = GameObject.FindGameObjectWithTag("Apple");
-
-        if (apple != null)
+        if (currentApple != null)
         {
             // Destroy the apple GameObject
-            Destroy(apple);
+            Destroy(currentApple);
+            currentApple = null;
 
             // Increase health by 20f
             healthBar.SetHealth(healthBar.GetHealth() + 20f);
-        } 
+        }
     }
 
     private void DropPoo()
@@ -50,6 +49,22 @@ public class PlayerController : MonoBehaviour
             {
                 AudioSource.PlayClipAtPoint(pooSound, transform.position);
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Apple"))
+        {
+            currentApple = other.gameObject;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Apple"))
+        {
+            currentApple = null;
         }
     }
 }
