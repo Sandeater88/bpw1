@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   healthBarPrefab: {fileID: 6614767756126861565, guid: 68f28331f3fed03439d2745adff4a121, type: 3}
-  crySprite: {fileID: -6388338761078672736, guid: 23748c298f885bf4c89671f6d30f562b, type: 3}
+  crySprite: {fileID: 21300000, guid: b71abc4cb5ff1e34b9dd1dec99de044d, type: 3}
   escapeSpeed: 10
   deathSound: {fileID: 8300000, guid: 8a8763b1adbc5ba43bc4c03572fb53a5, type: 3}
 --- !u!1001 &403164700231756073
