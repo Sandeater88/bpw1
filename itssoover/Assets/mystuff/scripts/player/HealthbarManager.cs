@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement; // For scene management
 using System.Collections; // For IEnumerator
 
-public class HealthBarManager: MonoBehaviour
+public class HealthBarManager : MonoBehaviour
 {
     public float maxHealth = 100f; // Maximum health of the player
     private float currentHealth;
@@ -28,20 +28,20 @@ public class HealthBarManager: MonoBehaviour
         // Optionally, you can add code here to always make the health bar face the camera
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.CompareTag("peasant"))
+        if (collision.CompareTag("peasant"))
         {
             if (damageCoroutine == null)
             {
-                damageCoroutine = StartCoroutine(TakeDamageOverTime());
+                damageCoroutine = StartCoroutine(TakeDamageOverTime(5f));
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (other.CompareTag("peasant"))
+        if (collision.CompareTag("peasant"))
         {
             if (damageCoroutine != null)
             {
@@ -51,11 +51,11 @@ public class HealthBarManager: MonoBehaviour
         }
     }
 
-    private IEnumerator TakeDamageOverTime()
+    private IEnumerator TakeDamageOverTime(float damage)
     {
         while (true)
         {
-            TakeDamage(maxHealth / 20f);
+            TakeDamage(damage);
             yield return new WaitForSeconds(1f);
         }
     }
