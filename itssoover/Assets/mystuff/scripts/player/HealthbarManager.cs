@@ -13,6 +13,7 @@ public class HealthBarManager : MonoBehaviour
 
     private Vector3 healthBarOffset = new Vector3(0, 2f, 0); // Offset to position the health bar above the player
     private Coroutine damageCoroutine;
+    private GameObject currentFlower;
 
     private void Start()
     {
@@ -25,7 +26,13 @@ public class HealthBarManager : MonoBehaviour
 
     private void Update()
     {
-        // Optionally, you can add code here to always make the health bar face the camera
+        // Check if the player presses "R" and can heal
+        if (currentFlower != null && Input.GetKeyDown(KeyCode.R))
+        {
+            Heal(20f);
+            Destroy(currentFlower);
+            currentFlower = null;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -37,6 +44,11 @@ public class HealthBarManager : MonoBehaviour
                 damageCoroutine = StartCoroutine(TakeDamageOverTime(5f));
             }
         }
+
+        if (collision.CompareTag("Flower"))
+        {
+            currentFlower = collision.gameObject;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -47,6 +59,14 @@ public class HealthBarManager : MonoBehaviour
             {
                 StopCoroutine(damageCoroutine);
                 damageCoroutine = null;
+            }
+        }
+
+        if (collision.CompareTag("Flower"))
+        {
+            if (collision.gameObject == currentFlower)
+            {
+                currentFlower = null;
             }
         }
     }
