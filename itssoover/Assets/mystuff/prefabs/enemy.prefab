@@ -175,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTag: Player
   attackRange: 5
-  moveSpeed: 4
+  moveSpeed: 3
 --- !u!114 &5298906597363548633
 MonoBehaviour:
   m_ObjectHideFlags: 0
