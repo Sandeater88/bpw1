@@ -23,6 +23,7 @@ public class Spitonchild : MonoBehaviour
 
     public delegate void AmmoChanged(float ammoPercentage);
     public event AmmoChanged OnAmmoChanged;
+    public AudioClip spitting;
 
     void Start()
     {
@@ -100,6 +101,11 @@ public class Spitonchild : MonoBehaviour
 
             // Notify ammo change
             NotifyAmmoChanged();
+            // Play the sound effect
+            if (spitting != null)
+            {
+                AudioSource.PlayClipAtPoint(spitting, transform.position);
+            }
         }
     }
 

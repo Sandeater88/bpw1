@@ -4,6 +4,8 @@ public class PlayerController : MonoBehaviour
 {
     public Otherammo healthBar; // Reference to the Otherammo script attached to the health bar
     public GameObject pooPrefab; // Prefab for the object to be spawned when pressing Q
+    public AudioClip pooSound; // Sound effect for dropping poo
+   
 
     void Update()
     {
@@ -41,6 +43,12 @@ public class PlayerController : MonoBehaviour
 
             // Spawn a GameObject at the player's position
             Instantiate(pooPrefab, transform.position, Quaternion.identity);
+
+            // Play the sound effect
+            if (pooSound != null)
+            {
+                AudioSource.PlayClipAtPoint(pooSound, transform.position);
+            }
         }
     }
 }

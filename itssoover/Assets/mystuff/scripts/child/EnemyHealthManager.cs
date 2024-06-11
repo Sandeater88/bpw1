@@ -12,6 +12,7 @@ public class EnemyHealthManager : MonoBehaviour
     public Sprite crySprite; // Sprite to change to when health is 0
     public float escapeSpeed = 10f; // Speed of the enemy when escaping
     private bool isDead = false;
+    public AudioClip deathSound; // Sound to play when the player dies
 
     private Vector3 healthBarOffset = new Vector3(0, 1.5f, 0); // Offset to position the health bar above the enemy
 
@@ -72,5 +73,9 @@ public class EnemyHealthManager : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = crySprite;
         GetComponent<Collider2D>().enabled = false;
         // Optionally disable other components like the enemy AI script
+        if (deathSound != null)
+        {
+            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+        }
     }
 }
