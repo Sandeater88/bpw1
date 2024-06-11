@@ -39,7 +39,14 @@ public class EnemyHealthManager : MonoBehaviour
         {
             TakeDamage(34f);
         }
+
+        if (collision.CompareTag("poo"))
+        {
+            TakeDamage(100f);
+        }
     }
+
+   
 
     public void TakeDamage(float damage)
     {

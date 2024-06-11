@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     {
         // Find the apple GameObject with the "Apple" tag
         GameObject apple = GameObject.FindGameObjectWithTag("Apple");
+
         if (apple != null)
         {
             // Destroy the apple GameObject
@@ -31,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
             // Increase health by 20f
             healthBar.SetHealth(healthBar.GetHealth() + 20f);
-        }
+        } 
     }
 
     private void DropPoo()
