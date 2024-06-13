@@ -123,6 +123,6 @@ public class HealthBarManager : MonoBehaviour
 
     private void LoadGameOverScene()
     {
-        SceneManager.LoadScene(2); // Load scene number 2
+        SceneManager.LoadScene(3); // Load scene number 2
     }
 }
