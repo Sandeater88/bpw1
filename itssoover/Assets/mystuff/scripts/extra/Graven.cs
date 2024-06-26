@@ -14,13 +14,9 @@ public class Graven : MonoBehaviour
 
     private void SpawnTrap()
     {
-        if (hole != null)
-        {
-            Instantiate(hole, transform.position, Quaternion.identity); //val verschijnt op de plek van de speler
-        }
-        else
-        {
-            Debug.LogError("Trap prefab is not assigned in the Inspector.");
-        }
+
+        Vector3 spawnPosition = new Vector3(transform.position.x, transform.position.y, 1); //val verschijnt op plek van de speler, maar achter de speler
+        Instantiate(hole, spawnPosition, Quaternion.identity);
+
     }
 }
