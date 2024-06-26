@@ -12,7 +12,9 @@ public class EnemyScript : MonoBehaviour
     public float attackRange = 2f; // Range within which enemy attacks
     public float moveSpeed = 2f; // Speed of enemy movement
 
-    private EnemyState currentState;
+    // Public property with private setter
+    public EnemyState CurrentState { get; private set; }
+
     private Transform playerTransform;
     private Transform enemyTransform;
     private Vector2[] patrolPoints; // Array to store patrol points for roaming
@@ -21,7 +23,7 @@ public class EnemyScript : MonoBehaviour
 
     private void Start()
     {
-        currentState = EnemyState.Roaming;
+        CurrentState = EnemyState.Roaming;
         playerTransform = GameObject.FindGameObjectWithTag(playerTag).transform;
         enemyTransform = transform;
         roamingOrigin = enemyTransform.position;
@@ -31,7 +33,7 @@ public class EnemyScript : MonoBehaviour
 
     private void Update()
     {
-        switch (currentState)
+        switch (CurrentState)
         {
             case EnemyState.Roaming:
                 Roam();
@@ -73,7 +75,7 @@ public class EnemyScript : MonoBehaviour
         // Check if player is within attack range
         if (Vector2.Distance(enemyTransform.position, playerTransform.position) <= attackRange)
         {
-            currentState = EnemyState.Attacking;
+            CurrentState = EnemyState.Attacking;
         }
     }
 
@@ -85,7 +87,7 @@ public class EnemyScript : MonoBehaviour
         // Check if player is out of attack range
         if (Vector2.Distance(enemyTransform.position, playerTransform.position) > attackRange)
         {
-            currentState = EnemyState.Roaming;
+            CurrentState = EnemyState.Roaming;
             roamingOrigin = enemyTransform.position; // Update roaming origin to current position
             InitializePatrolPoints(); // Re-initialize patrol points based on new origin
         }
