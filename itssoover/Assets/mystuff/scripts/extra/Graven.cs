@@ -1,22 +1,41 @@
 using UnityEngine;
+using System.Collections;
 
 public class Graven : MonoBehaviour
 {
-    public GameObject hole; // prefab van de val moet in de inspector worden gesleept
+    
+    public GameObject hole;    // prefab van de val moet in de inspector worden gesleept
+    public float gravenCooldown = 10f; //variabele voor cooldowntijd
+    public float lastKuil; 
+    public bool canDig = true; 
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G))  //wanneer G wordt ingedrukt, dan verschijnt de val
+        
+        if (Input.GetKeyDown(KeyCode.G) && canDig)   //checkt constant of G wordt ingedrukt en canDig=true 
         {
-            SpawnTrap();
+            SpawnTrap(); //roept functie aan om val te laten verschijnen
+            lastKuil = Time.time; //game geeft de verstreken gametijd zodra G wordt ingedrukt en koppelt het aan lastKuil
+        }
+
+        
+        if (Time.time - lastKuil < gravenCooldown) //als de verstreken tijd min de tijdwaarde van lastKuil kleiner is dan 10 sec
+        {
+
+            canDig = false; // dan gebeurt er niks als je G indrukt
+
+        }
+        else
+        {
+            canDig = true;  //is die nieuwe waarde hoger dan de cooldown, dan verschijnt er weer een val als G wordt ingedrukt
         }
     }
 
-    private void SpawnTrap()
+    public void SpawnTrap()
     {
-
-        Vector3 spawnPosition = new Vector3(transform.position.x, transform.position.y, 1); //val verschijnt op plek van de speler, maar achter de speler
-        Instantiate(hole, spawnPosition, Quaternion.identity);
+        //val verschijnt op plek van de speler, maar achter de speler zodat de kuil niet over spelersprite staat
+        Vector3 spawnPosition = new Vector3(transform.position.x, transform.position.y, 1); 
+        Instantiate(hole, spawnPosition, Quaternion.identity); //maakt nieuwe val-gameobject aan
 
     }
 }

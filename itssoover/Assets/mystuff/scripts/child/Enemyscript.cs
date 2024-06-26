@@ -1,16 +1,22 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyScript : MonoBehaviour
 {
+    //3 states waarin de enemy kan zijn
     public enum EnemyState
     {
         Roaming,
-        Attacking
+        Attacking,
+        Trapped
     }
 
-    public string playerTag = "Player"; // Tag of the player object
-    public float attackRange = 2f; // Range within which enemy attacks
+    public string lamaTag = "Player"; 
+    public float attackRange = 2f; 
     public float moveSpeed = 2f; // Speed of enemy movement
+    public float trapShakeDuration = 0.2f; // Duration of shaking when trapped
+    public float trapShakeMagnitude = 0.1f; // Magnitude of shaking when trapped
+    public float trapDuration = 3f; // Duration of being trapped
 
     // Public property with private setter
     public EnemyState CurrentState { get; private set; }
@@ -20,11 +26,13 @@ public class EnemyScript : MonoBehaviour
     private Vector2[] patrolPoints; // Array to store patrol points for roaming
     private int currentPatrolIndex; // Index of the current patrol point
     private Vector2 roamingOrigin; // Origin point for roaming
+    private Vector3 trappedOriginalPosition; // Original position when trapped
+    private Coroutine trapCoroutine; // Coroutine for trapping logic
 
     private void Start()
     {
         CurrentState = EnemyState.Roaming;
-        playerTransform = GameObject.FindGameObjectWithTag(playerTag).transform;
+        playerTransform = GameObject.FindGameObjectWithTag(lamaTag).transform;
         enemyTransform = transform;
         roamingOrigin = enemyTransform.position;
         InitializePatrolPoints();
@@ -41,6 +49,9 @@ public class EnemyScript : MonoBehaviour
                 break;
             case EnemyState.Attacking:
                 MoveTowardsPlayer();
+                break;
+            case EnemyState.Trapped:
+                // Do nothing when trapped
                 break;
         }
     }
@@ -91,5 +102,46 @@ public class EnemyScript : MonoBehaviour
             roamingOrigin = enemyTransform.position; // Update roaming origin to current position
             InitializePatrolPoints(); // Re-initialize patrol points based on new origin
         }
+    }
+
+    // Method to set the enemy state to trapped
+    public void SetTrappedState()
+    {
+        if (CurrentState != EnemyState.Trapped)
+        {
+            CurrentState = EnemyState.Trapped;
+            trappedOriginalPosition = enemyTransform.position;
+            if (trapCoroutine != null)
+            {
+                StopCoroutine(trapCoroutine);
+            }
+            trapCoroutine = StartCoroutine(HandleTrapping());
+        }
+    }
+
+    private IEnumerator HandleTrapping()
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < trapShakeDuration)
+        {
+            float x = Random.Range(-1f, 1f) * trapShakeMagnitude;
+            float y = Random.Range(-1f, 1f) * trapShakeMagnitude;
+            enemyTransform.position = trappedOriginalPosition + new Vector3(x, y, 0f);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        enemyTransform.position = trappedOriginalPosition;
+        yield return new WaitForSeconds(trapDuration - trapShakeDuration);
+
+        FreeFromTrap();
+    }
+
+    // Method to free the enemy from trapped state
+    private void FreeFromTrap()
+    {
+        CurrentState = EnemyState.Roaming;
+        roamingOrigin = enemyTransform.position; // Update roaming origin to current position
+        InitializePatrolPoints(); // Re-initialize patrol points based on new origin
     }
 }
